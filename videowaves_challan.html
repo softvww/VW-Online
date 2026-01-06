@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>VIDEOWAVES – Challan</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #ddd;
+    }
+
+    /* ===== PRINT SETUP ===== */
+    @page {
+      size: A4;
+      margin: 10mm;
+    }
+
+    @media print {
+      body {
+        margin: 0;
+        padding: 0;
+        background: #fff;
+      }
+
+      .page {
+        width: 100%;
+        min-height: auto;
+        margin: 0;
+        padding: 0;
+        box-shadow: none;
+      }
+
+      .form,
+      button {
+        display: none !important;
+      }
+    }
+
+    /* PAGE LAYOUT */
+    .page {
+      width: 100%;
+      max-width: 210mm;
+      min-height: 297mm;
+      margin: 10px auto;
+      padding: 5mm 8mm;
+      background: #fff;
+      box-shadow: 0 0 5px #888;
+    }
+
+    /* FORM */
+    .form {
+      border: 1px solid #999;
+      background: #f7f7f7;
+      padding: 8px;
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    input,
+    select {
+      padding: 4px;
+      font-size: 12px;
+    }
+
+    button {
+      padding: 6px 14px;
+      cursor: pointer;
+      margin-top: 6px;
+    }
+
+    /* SECTION TITLES */
+    .section-title {
+      font-weight: bold;
+      margin: 10px 0 4px;
+    }
+
+    /* SUB BOXES */
+    .sub-box {
+      margin-left: 20px;
+      margin-top: 4px;
+      display: none;
+    }
+
+    .sub-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+
+    .sub-row input[type="number"] {
+      width: 60px;
+    }
+
+    /* TABLE */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      border: 1px solid #000;
+      padding: 4px;
+      font-size: 12px;
+    }
+
+    th {
+      text-align: center;
+      background: #eee;
+    }
+
+    td.center {
+      text-align: center;
+    }
+
+    /* HEADER */
+    .header {
+      text-align: center;
+      border-bottom: 2px solid #000;
+      margin-bottom: 4mm;
+      padding-bottom: 2mm;
+    }
+
+    /* PROCESSOR layout */
+    #procBox {
+      margin-top: 4px;
+    }
+
+    .proc-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 12px;
+      margin-top: 6px;
+    }
+
+    .proc-item-wrap {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      white-space: nowrap;
+      padding: 2px 4px;
+      border-radius: 3px;
+    }
+
+    .proc-item-wrap input[type="number"] {
+      width: 55px;
+    }
+
+    /* MAIN CATEGORY GRID */
+    .main-category-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 24px;
+      margin-bottom: 10px;
+    }
+
+    .main-category {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+
+<body>
+  <script>
+    if (!localStorage.getItem("vw_user")) {
+      window.location.href = "login.html";
+    }
+  </script>
+
+  <div class="page">
+
+    <!-- FORM -->
+    <div class="form">
+
+      <div class="row">
+        <input id="f_client" placeholder="Client Name" style="flex:1">
+        <input id="f_mobile" placeholder="Mobile No" style="flex:1">
+      </div>
+
+      <div class="row">
+        <input id="f_location" placeholder="Event Location / Address" style="flex:2">
+      </div>
+      <div class="row">
+        <input id="f_driver" placeholder="Driver Name" style="flex:1">
+        <input id="f_vehicle" placeholder="Vehicle Number" style="flex:1">
+      </div>
+
+      <div class="row">
+        <select id="f_billby" style="flex:1">
+          <option value="">CHALLAN Made By</option>
+          <option>Giri</option>
+          <option>Ismail</option>
+          <option>Rajubhai</option>
+          <option>Kashiram Mama</option>
+        </select>
+        <input id="f_date" type="date" style="flex:1">
+      </div>
+
+      <!-- SETUP TEAM + WHATSAPP -->
+      <div class="row">
+        <select id="setup_team" style="flex:1">
+          <option value="">Select Setup Team</option>
+          <option value="919999999999">Team Raju</option>
+          <option value="919321607022">Team sUNIL p</option>
+          <option value="917777777777">Team Vijay</option>
+        </select>
+
+        <button type="button" onclick="sendWhatsApp()" style="margin-top:0;">
+          Send WhatsApp
+        </button>
+      </div>
+
+      <!-- MAIN CATEGORY GRID -->
+      <div class="main-category-grid">
+
+        <label class="main-category">
+          <input type="checkbox" id="ledMain"> LED WALL
+        </label>
+
+        <label class="main-category">
+          <input type="checkbox" id="projectorMain"> PROJECTOR
+        </label>
+
+        <label class="main-category">
+          <input type="checkbox" id="standMain"> STAND
+        </label>
+
+        <label class="main-category">
+          <input type="checkbox" id="powerAdvMain"> POWER PACK & GENI CABLES
+        </label>
+
+        <label class="main-category">
+          <input type="checkbox" id="txrxMain"> TX - RX
+        </label>
+
+        <label class="main-category">
+          <input type="checkbox" id="laptopMain"> LAPTOP
+        </label>
+
+        <label class="main-category">
+          <input type="checkbox" id="captureMain"> CAPTURE CARD
+        </label>
+
+        <label class="main-category">
+          <input type="checkbox" id="plasmaMain"> PLASMA TV
+        </label>
+
+        <label class="main-category">
+          <input type="checkbox" id="procMain"> PROCESSOR
+        </label>
+
+        <label class="main-category">
+          <input type="checkbox" id="soundMain"> SOUND SPEAKER
+        </label>
+
+        <label class="main-category">
+          <input type="checkbox" id="cableMain"> CABLES
+        </label>
+
+        <label class="main-category">
+          <input type="checkbox" id="powerMain"> POWER
+        </label>
+
+        <label class="main-category">
+          <input type="checkbox" id="watchoutMain"> WATCHOUT SERVERS
+        </label>
+
+      </div>
+
+      <!-- LED WALL -->
+      <div class="sub-box" id="ledBox">
+        <b>3.9MM OUTDOOR LED WALL</b>
+        <div class="sub-row"><input type="checkbox" class="led-item" data-name="3.9 Outdoor 500x500 [40x6]"> 500x500
+          [40x6] | QTY <input type="number" class="lqty"></div>
+        <div class="sub-row"><input type="checkbox" class="led-item" data-name="3.9 Outdoor 500x1000 [60x4]"> 500x1000
+          [60x4] | QTY <input type="number" class="lqty"></div>
+        <div class="sub-row"><input type="checkbox" class="led-item" data-name="3.9 Outdoor 500x500 Power Loop"> 500x500
+          Power Loop | QTY <input type="number" class="lqty"></div>
+        <div class="sub-row"><input type="checkbox" class="led-item" data-name="3.9 Outdoor 500x500 Data Loop"> 500x500
+          Data Loop | QTY <input type="number" class="lqty"></div>
+        <div class="sub-row"><input type="checkbox" class="led-item" data-name="3.9 Outdoor 500x1000 Power Loop">
+          500x1000 Power Loop | QTY <input type="number" class="lqty"></div>
+        <div class="sub-row"><input type="checkbox" class="led-item" data-name="3.9 Outdoor 500x1000 Data Loop">
+          500x1000 Data Loop | QTY <input type="number" class="lqty"></div>
+        <div class="sub-row"><input type="checkbox" class="led-item" data-name="3.9 Outdoor Extra Model 500x500"> Extra
+          Model 500x500 | QTY <input type="number" class="lqty"></div>
+        <div class="sub-row"><input type="checkbox" class="led-item" data-name="3.9 Outdoor Extra Model 500x1000"> Extra
+          Model 500x1000 | QTY <input type="number" class="lqty"></div>
+        <div class="sub-row"><input type="checkbox" class="led-item" data-name="3.9 VR Panel Outdoor"> VR Panel Outdoor
+          | QTY <input type="number" class="lqty"></div>
+
+        <hr>
+
+        <b>2.6MM LED WALL</b>
+        <div class="sub-row"><input type="checkbox" class="led-item" data-name="2.6 Panel"> LED Panel | QTY <input
+            type="number" class="lqty"></div>
+        <div class="sub-row"><input type="checkbox" class="led-item" data-name="2.6 VR Panel"> VR Panel | QTY <input
+            type="number" class="lqty"></div>
+        <div class="sub-row"><input type="checkbox" class="led-item" data-name="2.6 Power Loop"> Power Loop | QTY <input
+            type="number" class="lqty"></div>
+        <div class="sub-row"><input type="checkbox" class="led-item" data-name="2.6 Data Loop"> Data Loop | QTY <input
+            type="number" class="lqty"></div>
+        <div class="sub-row"><input type="checkbox" class="led-item" data-name="2.6 Extra Model"> Extra Model | QTY
+          <input type="number" class="lqty"></div>
+
+        <hr>
+
+        <b>3.9MM INDOOR LED WALL</b>
+        <div class="sub-row"><input type="checkbox" class="led-item" data-name="3.9 Indoor LED [125x6]"> LED [125x6] |
+          QTY <input type="number" class="lqty"></div>
+        <div class="sub-row"><input type="checkbox" class="led-item" data-name="Pune Sale Out"> Pune Sale Out | QTY
+          <input type="number" class="lqty"></div>
+        <div class="sub-row"><input type="checkbox" class="led-item" data-name="Navi Mumbai Sale Out"> Navi Mumbai Sale
+          Out | QTY <input type="number" class="lqty"></div>
+        <div class="sub-row"><input type="checkbox" class="led-item" data-name="China Repair"> China For Repair | QTY
+          <input type="number" class="lqty"></div>
+
+        <hr>
+
+        <b>2.9MM LED WALL</b>
+        <div class="sub-row"><input type="checkbox" class="led-item" data-name="2.9 90 Degree Cabinet"> 90 Degree | QTY
+          <input type="number" class="lqty"></div>
+        <div class="sub-row"><input type="checkbox" class="led-item" data-name="2.9 Flexible 500x500 [8x6]"> Flexible
+          8x6 | QTY <input type="number" class="lqty"></div>
+        <div class="sub-row"><input type="checkbox" class="led-item" data-name="2.9 Flexible 500x500 [6x9]"> Flexible
+          6x9 | QTY <input type="number" class="lqty"></div>
+
+        <hr>
+
+        <b>2.97 NEW LED WALL</b>
+        <div class="sub-row"><input type="checkbox" class="led-item" data-name="2.97 Normal Cabinet"> Normal Cabinet |
+          QTY <input type="number" class="lqty"></div>
+        <div class="sub-row"><input type="checkbox" class="led-item" data-name="2.97 90 Degree Cabinet"> 90 Degree
+          Cabinet | QTY <input type="number" class="lqty"></div>
+        <div class="sub-row"><input type="checkbox" class="led-item" data-name="2.97 Flex Cabinet"> Flex Cabinet | QTY
+          <input type="number" class="lqty"></div>
+        <div class="sub-row"><input type="checkbox" class="led-item" data-name="2.97 Data Loop"> Data Loop | QTY <input
+            type="number" class="lqty"></div>
+        <div class="sub-row"><input type="checkbox" class="led-item" data-name="2.97 Power Loop"> Power Loop | QTY
+          <input type="number" class="lqty"></div>
+        <div class="sub-row"><input type="checkbox" class="led-item" data-name="2.97 Blue Top"> Blue Top | QTY <input
+            type="number" class="lqty"></div>
+        <div class="sub-row"><input type="checkbox" class="led-item" data-name="2.97 Hanging Bracket Half Meter">
+          Hanging Bracket Half Meter | QTY <input type="number" class="lqty"></div>
+        <div class="sub-row"><input type="checkbox" class="led-item" data-name="2.97 Hanging Bracket 1 Meter"> Hanging
+          Bracket 1 Meter | QTY <input type="number" class="lqty"></div>
+      </div>
+
+      <!-- PROJECTOR -->
+      <div class="sub-box" id="projectorBox">
+        <b>OPTIMAA</b>
+        <div class="sub-row">
+          <input type="checkbox" class="projector-item" data-name="OPTUMA 5000" data-vw="1NO">
+          OPTUMA 5000 | VW 1NO | QTY <input type="number" class="prqty">
+        </div>
+        <div class="sub-row">
+          <input type="checkbox" class="projector-item" data-name="OPTUMA 5000" data-vw="2NO">
+          OPTUMA 5000 | VW 2NO | QTY <input type="number" class="prqty">
+        </div>
+
+        <hr>
+
+        <b>PANASONIC</b>
+        <div class="sub-row">
+          <input type="checkbox" class="projector-item" data-name="PANASONIC 5000" data-vw="1NO">
+          PANASONIC 5000 | VW 1NO | QTY <input type="number" class="prqty">
+        </div>
+        <div class="sub-row">
+          <input type="checkbox" class="projector-item" data-name="PANASONIC 5000" data-vw="2NO">
+          PANASONIC 5000 | VW 2NO | QTY <input type="number" class="prqty">
+        </div>
+
+        <hr>
+
+        <b>PANASONIC 8500</b>
+        <div class="sub-row">
+          <input type="checkbox" class="projector-item" data-name="PANASONIC 8500" data-vw="1NO">
+          PANASONIC 8500 | VW 1NO | QTY <input type="number" class="prqty">
+        </div>
+        <div class="sub-row">
+          <input type="checkbox" class="projector-item" data-name="PANASONIC 8500" data-vw="2NO">
+          PANASONIC 8500 | VW 2NO | QTY <input type="number" class="prqty">
+        </div>
+        <div class="sub-row">
+          <input type="checkbox" class="projector-item" data-name="PANASONIC 8500" data-vw="3NO">
+          PANASONIC 8500 | VW 3NO | QTY <input type="number" class="prqty">
+        </div>
+
+        <hr>
+
+        <b>LASER PROJECTOR</b>
+        <div class="sub-row">
+          <input type="checkbox" class="projector-item" data-name="PANASONIC LASER 7000" data-vw="1NO">
+          PANASONIC LASER 7000 | VW 1NO | QTY <input type="number" class="prqty">
+        </div>
+        <div class="sub-row">
+          <input type="checkbox" class="projector-item" data-name="PANASONIC LASER 7000" data-vw="2NO">
+          PANASONIC LASER 7000 | VW 2NO | QTY <input type="number" class="prqty">
+        </div>
+
+        <hr>
+
+        <b>LENS</b>
+        <div class="sub-row">
+          <input type="checkbox" class="projector-item" data-name="SHORT THROW LENS" data-vw="1NO">
+          SHORT THROW LENS | VW 1NO | QTY <input type="number" class="prqty">
+        </div>
+        <div class="sub-row">
+          <input type="checkbox" class="projector-item" data-name="SHORT THROW LENS" data-vw="2NO">
+          SHORT THROW LENS | VW 2NO | QTY <input type="number" class="prqty">
+        </div>
+        <div class="sub-row">
+          <input type="checkbox" class="projector-item" data-name="SHORT THROW LENS" data-vw="3NO">
+          SHORT THROW LENS | VW 3NO | QTY <input type="number" class="prqty">
+        </div>
+
+        <hr>
+
+        <b>OTHERS</b>
+        <div class="sub-row">
+          <input type="checkbox" class="projector-item" data-name="SHARP 3500" data-vw="1NO">
+          SHARP 3500 | VW 1NO | QTY <input type="number" class="prqty">
+        </div>
+      </div>
+
+      <!-- STAND -->
+      <div class="sub-box" id="standBox">
+        <b>SUPPORT</b>
+        <div class="sub-row"><input type="checkbox" class="stand-item" data-name="Base Support"> BASE SUPPORT | QTY
+          <input type="number" class="stqty"></div>
+        <div class="sub-row"><input type="checkbox" class="stand-item" data-name="Base Support Black Old"> BASE SUPPORT
+          BLACK OLD | QTY <input type="number" class="stqty"></div>
+        <div class="sub-row"><input type="checkbox" class="stand-item" data-name="Top Support"> TOP SUPPORT | QTY <input
+            type="number" class="stqty"></div>
+        <div class="sub-row"><input type="checkbox" class="stand-item" data-name="Top Support Black Old"> TOP SUPPORT
+          BLACK OLD | QTY <input type="number" class="stqty"></div>
+        <div class="sub-row"><input type="checkbox" class="stand-item" data-name="2FT Support"> 2FT SUPPORT | QTY <input
+            type="number" class="stqty"></div>
+        <div class="sub-row"><input type="checkbox" class="stand-item" data-name="2FT Support Black Old"> 2FT SUPPORT
+          BLACK OLD | QTY <input type="number" class="stqty"></div>
+
+        <hr>
+
+        <b>HANGING BRACKET</b>
+        <div class="sub-row"><input type="checkbox" class="stand-item" data-name="2.9MM Hanging Bracket"> 2.9MM HANGING
+          BRACKET | QTY <input type="number" class="stqty"></div>
+        <div class="sub-row"><input type="checkbox" class="stand-item" data-name="2.6MM Hanging Bracket"> 2.6MM HANGING
+          BRACKET | QTY <input type="number" class="stqty"></div>
+        <div class="sub-row"><input type="checkbox" class="stand-item" data-name="3.9MM Hanging Bracket Indoor"> 3.9MM
+          HANGING BRACKET INDOOR | QTY <input type="number" class="stqty"></div>
+        <div class="sub-row"><input type="checkbox" class="stand-item" data-name="3.9MM Hanging Bracket Outdoor"> 3.9MM
+          HANGING BRACKET OUTDOOR | QTY <input type="number" class="stqty"></div>
+
+        <hr>
+
+        <b>PLASMA STAND</b>
+        <div class="sub-row"><input type="checkbox" class="stand-item" data-name="Plasma Wall Mount"> PLASMA WALL MOUNT
+          | QTY <input type="number" class="stqty"></div>
+        <div class="sub-row"><input type="checkbox" class="stand-item" data-name="Plasma Stand 85 Inch"> PLASMA STAND
+          85'' | QTY <input type="number" class="stqty"></div>
+        <div class="sub-row"><input type="checkbox" class="stand-item" data-name="Plasma Stand 40/55/65 Inch"> PLASMA
+          STAND 40'' / 55'' / 65'' | QTY <input type="number" class="stqty"></div>
+        <div class="sub-row"><input type="checkbox" class="stand-item" data-name="Plasma Comfort Stand"> PLASMA COMFORT
+          STAND | QTY <input type="number" class="stqty"></div>
+
+        <hr>
+
+        <b>OTHERS</b>
+        <div class="sub-row"><input type="checkbox" class="stand-item" data-name="Mix Support Top & Base"> MIX SUPPORT
+          [TOP & BASE] | QTY <input type="number" class="stqty"></div>
+        <div class="sub-row"><input type="checkbox" class="stand-item" data-name="2.9MM Hanging Bracket 1 MTR"> 2.9MM
+          HANGING BRACKET 1 MTR | QTY <input type="number" class="stqty"></div>
+        <div class="sub-row"><input type="checkbox" class="stand-item" data-name="2.9MM Hanging Bracket 0.5 MTR"> 2.9MM
+          HANGING BRACKET 0.5 MTR | QTY <input type="number" class="stqty"></div>
+        <div class="sub-row"><input type="checkbox" class="stand-item" data-name="3.9MM Flex Hanging Bracket"> 3.9MM
+          FLEX HANGING BRACKET | QTY <input type="number" class="stqty"></div>
+      </div>
+
+      <!-- POWER PACK & GENI CABLES -->
+      <div class="sub-box" id="powerAdvBox">
+        <b>RED J BOX</b>
+        <div class="sub-row"><input type="checkbox" class="power-adv" data-name="Red J Box" data-vw="1NO"> RED J BOX 1NO
+          | QTY <input type="number" class="paq"></div>
+        <div class="sub-row"><input type="checkbox" class="power-adv" data-name="Red J Box" data-vw="2NO"> RED J BOX 2NO
+          | QTY <input type="number" class="paq"></div>
+        <div class="sub-row"><input type="checkbox" class="power-adv" data-name="Red J Box" data-vw="3NO"> RED J BOX 3NO
+          | QTY <input type="number" class="paq"></div>
+        <div class="sub-row"><input type="checkbox" class="power-adv" data-name="Red J Box" data-vw="4NO"> RED J BOX 4NO
+          | QTY <input type="number" class="paq"></div>
+
+        <hr>
+
+        <b>450 HADDA</b>
+        <div class="sub-row"><input type="checkbox" class="power-adv" data-name="450 Hadda" data-vw="1NO"> 450 HADDA 1NO
+          | QTY <input type="number" class="paq"></div>
+        <div class="sub-row"><input type="checkbox" class="power-adv" data-name="450 Hadda" data-vw="2NO"> 450 HADDA 2NO
+          | QTY <input type="number" class="paq"></div>
+        <div class="sub-row"><input type="checkbox" class="power-adv" data-name="450 Hadda" data-vw="3NO"> 450 HADDA 3NO
+          | QTY <input type="number" class="paq"></div>
+        <div class="sub-row"><input type="checkbox" class="power-adv" data-name="450 Hadda" data-vw="4NO"> 450 HADDA 4NO
+          | QTY <input type="number" class="paq"></div>
+
+        <hr>
+
+        <b>JUMBO POWER PACK</b>
+        <div class="sub-row"><input type="checkbox" class="power-adv" data-name="Jumbo Power Pack" data-vw="11NO"> JUMBO
+          POWER PACK 11NO | QTY <input type="number" class="paq"></div>
+        <div class="sub-row"><input type="checkbox" class="power-adv" data-name="Jumbo Power Pack" data-vw="12NO"> JUMBO
+          POWER PACK 12NO | QTY <input type="number" class="paq"></div>
+
+        <hr>
+
+        <b>32 AMP POWER PACK</b>
+        <div class="sub-row"><input type="checkbox" class="power-adv" data-name="32 AMP Power Pack" data-vw="1NO"> 1NO |
+          QTY <input type="number" class="paq"></div>
+        <div class="sub-row"><input type="checkbox" class="power-adv" data-name="32 AMP Power Pack" data-vw="2NO"> 2NO |
+          QTY <input type="number" class="paq"></div>
+        <div class="sub-row"><input type="checkbox" class="power-adv" data-name="32 AMP Power Pack" data-vw="3NO"> 3NO |
+          QTY <input type="number" class="paq"></div>
+        <div class="sub-row"><input type="checkbox" class="power-adv" data-name="32 AMP Power Pack" data-vw="4NO"> 4NO |
+          QTY <input type="number" class="paq"></div>
+        <div class="sub-row"><input type="checkbox" class="power-adv" data-name="32 AMP Power Pack" data-vw="5NO"> 5NO |
+          QTY <input type="number" class="paq"></div>
+        <div class="sub-row"><input type="checkbox" class="power-adv" data-name="32 AMP Power Pack" data-vw="6NO"> 6NO |
+          QTY <input type="number" class="paq"></div>
+        <div class="sub-row"><input type="checkbox" class="power-adv" data-name="32 AMP Power Pack" data-vw="7NO"> 7NO |
+          QTY <input type="number" class="paq"></div>
+        <div class="sub-row"><input type="checkbox" class="power-adv" data-name="32 AMP Power Pack" data-vw="8NO"> 8NO |
+          QTY <input type="number" class="paq"></div>
+
+        <hr>
+
+        <b>16 AMP POWER PACK</b>
+        <div class="sub-row"><input type="checkbox" class="power-adv" data-name="16 AMP Power Pack" data-vw="1NO"> 1NO |
+          QTY <input type="number" class="paq"></div>
+        <div class="sub-row"><input type="checkbox" class="power-adv" data-name="16 AMP Power Pack" data-vw="2NO"> 2NO |
+          QTY <input type="number" class="paq"></div>
+        <div class="sub-row"><input type="checkbox" class="power-adv" data-name="16 AMP Power Pack" data-vw="3NO"> 3NO |
+          QTY <input type="number" class="paq"></div>
+        <div class="sub-row"><input type="checkbox" class="power-adv" data-name="16 AMP Power Pack" data-vw="4NO"> 4NO |
+          QTY <input type="number" class="paq"></div>
+        <div class="sub-row"><input type="checkbox" class="power-adv" data-name="16 AMP Power Pack" data-vw="5NO"> 5NO |
+          QTY <input type="number" class="paq"></div>
+        <div class="sub-row"><input type="checkbox" class="power-adv" data-name="16 AMP Power Pack" data-vw="6NO"> 6NO |
+          QTY <input type="number" class="paq"></div>
+        <div class="sub-row"><input type="checkbox" class="power-adv" data-name="16 AMP Power Pack" data-vw="7NO"> 7NO |
+          QTY <input type="number" class="paq"></div>
+
+        <hr>
+
+        <b>32 AMP POWER HADDA</b>
+        <div class="sub-row"><input type="checkbox" class="power-adv" data-name="32 AMP Power Hadda" data-vw="1NO"> 1NO
+          | QTY <input type="number" class="paq"></div>
+        <div class="sub-row"><input type="checkbox" class="power-adv" data-name="32 AMP Power Hadda" data-vw="2NO"> 2NO
+          | QTY <input type="number" class="paq"></div>
+        <div class="sub-row"><input type="checkbox" class="power-adv" data-name="32 AMP Power Hadda" data-vw="3NO"> 3NO
+          | QTY <input type="number" class="paq"></div>
+        <div class="sub-row"><input type="checkbox" class="power-adv" data-name="32 AMP Power Hadda" data-vw="4NO"> 4NO
+          | QTY <input type="number" class="paq"></div>
+        <div class="sub-row"><input type="checkbox" class="power-adv" data-name="32 AMP Power Hadda" data-vw="5NO"> 5NO
+          | QTY <input type="number" class="paq"></div>
+        <div class="sub-row"><input type="checkbox" class="power-adv" data-name="32 AMP Power Hadda" data-vw="6NO"> 6NO
+          | QTY <input type="number" class="paq"></div>
+        <div class="sub-row"><input type="checkbox" class="power-adv" data-name="32 AMP Power Hadda" data-vw="7NO"> 7NO
+          | QTY <input type="number" class="paq"></div>
+        <div class="sub-row"><input type="checkbox" class="power-adv" data-name="32 AMP Power Hadda" data-vw="8NO"> 8NO
+          | QTY <input type="number" class="paq"></div>
+
+        <hr>
+
+        <b>GENI / CABLES</b>
+        <div class="sub-row"><input type="checkbox" class="power-adv" data-name="32 AMP Male/Female Cable"> 32 AMP
+          MALE/FEMALE | QTY <input type="number" class="paq"></div>
+        <div class="sub-row"><input type="checkbox" class="power-adv" data-name="Jumbo Power Geni"> JUMBO POWER GENI |
+          QTY <input type="number" class="paq"></div>
+        <div class="sub-row"><input type="checkbox" class="power-adv" data-name="32 AMP Top Geni Cable"> 32 AMP TOP GENI
+          | QTY <input type="number" class="paq"></div>
+        <div class="sub-row"><input type="checkbox" class="power-adv" data-name="32 AMP Open Geni Cable"> 32 AMP OPEN
+          GENI | QTY <input type="number" class="paq"></div>
+        <div class="sub-row"><input type="checkbox" class="power-adv" data-name="16 AMP Top Geni Cable"> 16 AMP TOP GENI
+          | QTY <input type="number" class="paq"></div>
+      </div>
+
+      <!-- TX - RX -->
+      <div class="sub-box" id="txrxBox">
+        <b>TRANSMIT (TX)</b>
+        <div class="sub-row">
+          <input type="checkbox" class="txrx-item" data-name="Transmit (TX)">
+          Transmit (TX) | QTY
+          <input type="number" class="txrxqty">
+        </div>
+
+        <hr>
+
+        <b>RECEIVE (RX)</b>
+        <div class="sub-row">
+          <input type="checkbox" class="txrx-item" data-name="Receive (RX)">
+          Receive (RX) | QTY
+          <input type="number" class="txrxqty">
+        </div>
+      </div>
+
+      <!-- LAPTOP -->
+      <div class="sub-box" id="laptopBox">
+        <div id="laptopList">
+          <div class="sub-row">
+            <input type="checkbox" class="laptop-item">
+            Laptop Name / Model :
+            <input type="text" class="laptop-name" placeholder="Example: Dell G15 i7">
+            Serial No :
+            <input type="text" class="laptop-serial" placeholder="Enter Serial">
+            QTY
+            <input type="number" class="laptop-qty" value="1" style="width:60px">
+          </div>
+        </div>
+        <button type="button" onclick="addLaptopRow()">Add Laptop</button>
+      </div>
+
+      <!-- CAPTURE CARD -->
+      <div class="sub-box" id="captureBox">
+        <div id="captureList">
+          <div class="sub-row">
+            <input type="checkbox" class="capture-item">
+            Capture Card Name / Model :
+            <input type="text" class="capture-name" placeholder="Example: Elgato 4K60 Pro">
+            Serial No :
+            <input type="text" class="capture-serial" placeholder="Enter Serial">
+            QTY
+            <input type="number" class="capture-qty" value="1" style="width:60px">
+          </div>
+        </div>
+        <button type="button" onclick="addCaptureRow()">Add Capture Card</button>
+      </div>
+
+      <!-- PLASMA TV -->
+      <div class="sub-box" id="plasmaBox">
+        <div class="sub-row">
+          Size
+          <select class="psize" id="psize">
+            <option value="">Select</option>
+            <option>40"</option>
+            <option>55"</option>
+            <option>65"</option>
+            <option>85"</option>
+          </select>
+
+          Company
+          <select class="pbrand" id="pbrand">
+            <option value="">Select</option>
+            <option>VU</option>
+            <option>Samsung</option>
+            <option>TRUSENSE</option>
+            <option>JVC</option>
+            <option>VISE</option>
+          </select>
+
+          VW No
+          <select id="pvw">
+            <option value="">Select</option>
+          </select>
+
+          Serial
+          <input type="text" id="pserial" readonly style="width:230px">
+
+          QTY
+          <input type="number" id="pqty" value="1" style="width:50px">
+
+          <button type="button" onclick="addPlasma()">Add</button>
+        </div>
+      </div>
+
+      <!-- PROCESSOR -->
+      <div class="sub-box" id="procBox">
+        <div class="proc-grid">
+          <label class="proc-item-wrap">
+            <input type="checkbox" class="proc-item" data-name="H-5 Switcher">
+            H-5 Switcher | QTY <input type="number" class="pqty2">
+          </label>
+          <label class="proc-item-wrap">
+            <input type="checkbox" class="proc-item" data-name="802 Switcher">
+            802 Switcher | QTY <input type="number" class="pqty2">
+          </label>
+          <label class="proc-item-wrap">
+            <input type="checkbox" class="proc-item" data-name="604 HD Switcher">
+            604 HD Switcher | QTY <input type="number" class="pqty2">
+          </label>
+          <label class="proc-item-wrap">
+            <input type="checkbox" class="proc-item" data-name="ANALOGWAY">
+            ANALOGWAY | QTY <input type="number" class="pqty2">
+          </label>
+          <label class="proc-item-wrap">
+            <input type="checkbox" class="proc-item" data-name="CP 3072">
+            CP 3072 | QTY <input type="number" class="pqty2">
+          </label>
+          <label class="proc-item-wrap">
+            <input type="checkbox" class="proc-item" data-name="MULTI SCREEN">
+            MULTI SCREEN | QTY <input type="number" class="pqty2">
+          </label>
+          <label class="proc-item-wrap">
+            <input type="checkbox" class="proc-item" data-name="P-10 Switcher">
+            P-10 Switcher | QTY <input type="number" class="pqty2">
+          </label>
+          <label class="proc-item-wrap">
+            <input type="checkbox" class="proc-item" data-name="P-20 Switcher">
+            P-20 Switcher | QTY <input type="number" class="pqty2">
+          </label>
+          <label class="proc-item-wrap">
+            <input type="checkbox" class="proc-item" data-name="VX1 8x8 HDMI Matrix">
+            VX1 8x8 HDMI Matrix | QTY <input type="number" class="pqty2">
+          </label>
+          <label class="proc-item-wrap">
+            <input type="checkbox" class="proc-item" data-name="16x16 DVI Matrix">
+            16x16 DVI Matrix | QTY <input type="number" class="pqty2">
+          </label>
+          <label class="proc-item-wrap">
+            <input type="checkbox" class="proc-item" data-name="8x8 DVI Matrix">
+            8x8 DVI Matrix | QTY <input type="number" class="pqty2">
+          </label>
+          <label class="proc-item-wrap">
+            <input type="checkbox" class="proc-item" data-name="VX600">
+            VX600 | QTY <input type="number" class="pqty2">
+          </label>
+          <label class="proc-item-wrap">
+            <input type="checkbox" class="proc-item" data-name="VX4S">
+            VX4S | QTY <input type="number" class="pqty2">
+          </label>
+          <label class="proc-item-wrap">
+            <input type="checkbox" class="proc-item" data-name="VX1000">
+            VX1000 | QTY <input type="number" class="pqty2">
+          </label>
+          <label class="proc-item-wrap">
+            <input type="checkbox" class="proc-item" data-name="CAN">
+            CAN | QTY <input type="number" class="pqty2">
+          </label>
+          <label class="proc-item-wrap">
+            <input type="checkbox" class="proc-item" data-type="4K Prime Novastar">
+            4K Prime Novastar | VW / Name
+            <input type="text" class="pname" placeholder="VW-01">
+            QTY <input type="number" class="pqty2">
+          </label>
+          <label class="proc-item-wrap">
+            <input type="checkbox" class="proc-item" data-type="4K Prime Novastar Pro">
+            4K Prime Novastar Pro | VW / Name
+            <input type="text" class="pname" placeholder="VW-01">
+            QTY <input type="number" class="pqty2">
+          </label>
+        </div>
+      </div>
+
+      <!-- SOUND SPEAKER -->
+      <div class="sub-box" id="soundBox">
+        <div class="sub-row"><input type="checkbox" class="sound-item" data-name="JBL K12"> JBL K12 | QTY <input
+            type="number" class="sqty"></div>
+        <div class="sub-row"><input type="checkbox" class="sound-item" data-name="JBL VRX"> JBL VRX | QTY <input
+            type="number" class="sqty"></div>
+        <div class="sub-row"><input type="checkbox" class="sound-item" data-name="JBL SRX"> JBL SRX | QTY <input
+            type="number" class="sqty"></div>
+        <div class="sub-row"><input type="checkbox" class="sound-item" data-name="EON Speaker"> EON | QTY <input
+            type="number" class="sqty"></div>
+        <div class="sub-row"><input type="checkbox" class="sound-item" data-name="K8 Speaker"> K8 | QTY <input
+            type="number" class="sqty"></div>
+        <div class="sub-row"><input type="checkbox" class="sound-item" data-name="K10 Speaker"> K10 | QTY <input
+            type="number" class="sqty"></div>
+        <div class="sub-row"><input type="checkbox" class="sound-item" data-name="Subwoofer"> Subwoofer | QTY <input
+            type="number" class="sqty"></div>
+      </div>
+
+      <!-- CABLES -->
+      <div class="sub-box" id="cableBox">
+        <div class="sub-row"><input type="checkbox" class="cable-item" data-name="CAT6 Long 90m"> CAT6 Long 90m | QTY
+          <input type="number" class="cqty"></div>
+        <div class="sub-row"><input type="checkbox" class="cable-item" data-name="CAT6 Short"> CAT6 Short | QTY <input
+            type="number" class="cqty"></div>
+        <div class="sub-row"><input type="checkbox" class="cable-item" data-name="HDMI Long Cable"> HDMI Long Cable |
+          QTY <input type="number" class="cqty"></div>
+        <div class="sub-row"><input type="checkbox" class="cable-item" data-name="SDI Long Cable"> SDI Long Cable | QTY
+          <input type="number" class="cqty"></div>
+        <div class="sub-row"><input type="checkbox" class="cable-item" data-name="Fiber Cable 100m"> Fiber Cable 100m |
+          QTY <input type="number" class="cqty"></div>
+        <div class="sub-row"><input type="checkbox" class="cable-item" data-name="Fiber Cable 300m"> Fiber Cable 300m |
+          QTY <input type="number" class="cqty"></div>
+        <div class="sub-row"><input type="checkbox" class="cable-item" data-name="Fiber Cable 500m"> Fiber Cable 500m |
+          QTY <input type="number" class="cqty"></div>
+        <div class="sub-row"><input type="checkbox" class="cable-item" data-name="HDMI to HDMI"> HDMI to HDMI | QTY
+          <input type="number" class="cqty"></div>
+        <div class="sub-row"><input type="checkbox" class="cable-item" data-name="DVI to HDMI"> DVI to HDMI | QTY <input
+            type="number" class="cqty"></div>
+        <div class="sub-row"><input type="checkbox" class="cable-item" data-name="USB Cable"> USB Cable | QTY <input
+            type="number" class="cqty"></div>
+        <div class="sub-row"><input type="checkbox" class="cable-item" data-name="SDI Small"> SDI Small | QTY <input
+            type="number" class="cqty"></div>
+      </div>
+
+      <!-- POWER -->
+      <div class="sub-box" id="powerBox">
+        <div class="sub-row"><input type="checkbox" class="cable-item" data-name="Power Male / Female"> Power Male /
+          Female | QTY <input type="number" class="cqty"></div>
+        <div class="sub-row"><input type="checkbox" class="cable-item" data-name="Data Cable"> Data Cable | QTY <input
+            type="number" class="cqty"></div>
+        <div class="sub-row"><input type="checkbox" class="cable-item" data-name="Power Cable"> Power Cable | QTY <input
+            type="number" class="cqty"></div>
+        <div class="sub-row"><input type="checkbox" class="cable-item" data-name="Blue Top Cable"> Blue Top Cable | QTY
+          <input type="number" class="cqty"></div>
+        <div class="sub-row"><input type="checkbox" class="cable-item" data-name="Blue Top 16A"> Blue Top 16A | QTY
+          <input type="number" class="cqty"></div>
+        <div class="sub-row"><input type="checkbox" class="cable-item" data-name="32 AMP Male / Female"> 32 AMP Male /
+          Female | QTY <input type="number" class="cqty"></div>
+        <div class="sub-row"><input type="checkbox" class="cable-item" data-name="32 AMP Hada"> 32 AMP Hada | QTY <input
+            type="number" class="cqty"></div>
+        <div class="sub-row"><input type="checkbox" class="cable-item" data-name="Y Cable"> Y Cable | QTY <input
+            type="number" class="cqty"></div>
+        <div class="sub-row"><input type="checkbox" class="cable-item" data-name="Console Board"> Console Board | QTY
+          <input type="number" class="cqty"></div>
+        <div class="sub-row"><input type="checkbox" class="cable-item" data-name="Console Hada"> Console Hada | QTY
+          <input type="number" class="cqty"></div>
+        <div class="sub-row"><input type="checkbox" class="cable-item" data-name="Geni Cable 15m"> Geni Cable 15m | QTY
+          <input type="number" class="cqty"></div>
+        <div class="sub-row"><input type="checkbox" class="cable-item" data-name="Geni Cable 25m"> Geni Cable 25m | QTY
+          <input type="number" class="cqty"></div>
+        <div class="sub-row"><input type="checkbox" class="cable-item" data-name="Geni Cable 50m"> Geni Cable 50m | QTY
+          <input type="number" class="cqty"></div>
+        <div class="sub-row"><input type="checkbox" class="cable-item" data-name="AQS Power Pack"> AQS Power Pack | QTY
+          <input type="number" class="cqty"></div>
+        <div class="sub-row"><input type="checkbox" class="cable-item" data-name="Red Junction Box"> Red Junction Box |
+          QTY <input type="number" class="cqty"></div>
+        <div class="sub-row"><input type="checkbox" class="cable-item" data-name="Extension Board"> Extension Board |
+          QTY <input type="number" class="cqty"></div>
+      </div>
+
+      <!-- WATCHOUT SERVERS -->
+      <div class="sub-box" id="watchoutBox">
+        <div class="sub-row"><input type="checkbox" class="watchout-item" data-name="WO-1"> WO-1 | QTY <input
+            type="number" class="wqty"></div>
+        <div class="sub-row"><input type="checkbox" class="watchout-item" data-name="WO-2"> WO-2 | QTY <input
+            type="number" class="wqty"></div>
+        <div class="sub-row"><input type="checkbox" class="watchout-item" data-name="WO-3"> WO-3 | QTY <input
+            type="number" class="wqty"></div>
+        <div class="sub-row"><input type="checkbox" class="watchout-item" data-name="WO-4"> WO-4 | QTY <input
+            type="number" class="wqty"></div>
+        <div class="sub-row"><input type="checkbox" class="watchout-item" data-name="WO-5"> WO-5 | QTY <input
+            type="number" class="wqty"></div>
+        <div class="sub-row"><input type="checkbox" class="watchout-item" data-name="WO-6"> WO-6 | QTY <input
+            type="number" class="wqty"></div>
+        <div class="sub-row"><input type="checkbox" class="watchout-item" data-name="WO-7"> WO-7 | QTY <input
+            type="number" class="wqty"></div>
+        <div class="sub-row"><input type="checkbox" class="watchout-item" data-name="WO-8"> WO-8 | QTY <input
+            type="number" class="wqty"></div>
+        <div class="sub-row"><input type="checkbox" class="watchout-item" data-name="V/R-1"> V/R-1 | QTY <input
+            type="number" class="wqty"></div>
+        <div class="sub-row"><input type="checkbox" class="watchout-item" data-name="V/R-2"> V/R-2 | QTY <input
+            type="number" class="wqty"></div>
+        <div class="sub-row"><input type="checkbox" class="watchout-item" data-name="R-1"> R-1 | QTY <input
+            type="number" class="wqty"></div>
+        <div class="sub-row"><input type="checkbox" class="watchout-item" data-name="R-2"> R-2 | QTY <input
+            type="number" class="wqty"></div>
+        <div class="sub-row"><input type="checkbox" class="watchout-item" data-name="R-3"> R-3 | QTY <input
+            type="number" class="wqty"></div>
+      </div>
+
+      <!-- ================= OPERATOR TOOL BAG ================= -->
+      <div class="section-title">OPERATOR TOOL BAG</div>
+      <label>
+        <input type="checkbox" id="operatorMain"> Operator Tool Bag
+      </label>
+
+      <div class="sub-box" id="operatorBox">
+        <div class="sub-row">
+          <input type="checkbox" class="operator-item" data-name="Pravin (PM)">
+          Pravin ( PM ) | Support
+          <input type="text" class="support-op" placeholder="Support Name">
+        </div>
+
+        <div class="sub-row">
+          <input type="checkbox" class="operator-item" data-name="Pravin (CP)">
+          Pravin ( CP ) | Support
+          <input type="text" class="support-op">
+        </div>
+
+        <div class="sub-row"><input type="checkbox" class="operator-item" data-name="Bakul"> BaKUL | Support <input
+            type="text" class="support-op"></div>
+        <div class="sub-row"><input type="checkbox" class="operator-item" data-name="Usman"> Usman | Support <input
+            type="text" class="support-op"></div>
+        <div class="sub-row"><input type="checkbox" class="operator-item" data-name="Jayesh Mahadik"> Jayesh Mahadik |
+          Support <input type="text" class="support-op"></div>
+        <div class="sub-row"><input type="checkbox" class="operator-item" data-name="Faisal"> Faisal | Support <input
+            type="text" class="support-op"></div>
+        <div class="sub-row"><input type="checkbox" class="operator-item" data-name="Mahesh Nagap"> Mahesh Nagap |
+          Support <input type="text" class="support-op"></div>
+        <div class="sub-row"><input type="checkbox" class="operator-item" data-name="Nagesh A"> Nagesh A | Support
+          <input type="text" class="support-op"></div>
+        <div class="sub-row"><input type="checkbox" class="operator-item" data-name="Roshan Gaikwad"> Roshan Gaikwad |
+          Support <input type="text" class="support-op"></div>
+        <div class="sub-row"><input type="checkbox" class="operator-item" data-name="Shivaji Patil"> Shivaji Patil |
+          Support <input type="text" class="support-op"></div>
+        <div class="sub-row"><input type="checkbox" class="operator-item" data-name="Akash Misal"> Akash Misal | Support
+          <input type="text" class="support-op"></div>
+        <div class="sub-row"><input type="checkbox" class="operator-item" data-name="Yeshwant Patil"> Yeshwant Patil |
+          Support <input type="text" class="support-op"></div>
+        <div class="sub-row"><input type="checkbox" class="operator-item" data-name="Bablu"> Bablu | Support <input
+            type="text" class="support-op"></div>
+        <div class="sub-row"><input type="checkbox" class="operator-item" data-name="Satish"> Satish | Support <input
+            type="text" class="support-op"></div>
+      </div>
+
+    </div>
+    <br>
+    <!-- HEADER -->
+    <div class="header">
+      <img src="./new.png" alt="Videowaves Audiovisuals" style=" width:100%; height:auto; display:block;">
+      <div style="font-size:11px; line-height:1.4;">
+        Udyog Sadan, D5, Near MIDC Police Station,Near Gajalee Hotel, Andheri East, Mumbai, Maharashtra 400093
+      </div>
+    </div>
+
+    <!-- INFO + CHALLAN NO + DATETIME -->
+    <div style="font-size:12px;margin-bottom:6px;">
+      <b>Challan No:</b> <span id="p_challan"><br>
+      <b style="border:1px solid #000;padding:2px 6px;font-size:11px;">RETURNABLE
+</b>
+</span>
+<br>
+      <span id="p_datetime" style="font-size:10px;color:#666;"></span><br>
+      <b style="margin-left: 500px;">Driver Name: </b><span id="p_driver"></span><br>
+      <b style="margin-left: 500px;">Vehicle Number: </b><span id="p_vehicle"></span><br>
+      <b>Client:</b> <span id="p_client"></span><br>
+      <b>Mobile:</b> <span id="p_mobile"></span><br>
+      <b>Location:</b> <span id="p_location"></span><br>
+      <b>Challan Made By:</b> <span id="p_billby"></span><br>
+      <b>Date:</b> <span id="p_date"></span>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Sr</th>
+          <th>Description</th>
+          <th>Qty</th>
+        </tr>
+      </thead>
+      <tbody id="list"></tbody>
+    </table>
+
+    <button onclick="generateChallan()">Generate Challan</button>
+    <button onclick="logoutUser()">Logout</button>
+
+  </div>
+
+  <script>
+    const plasmaSerialDB = {
+      '85"|VU|1no': '3TE85G2144G1CF8SJ0126',
+      '85"|VU|2no': '3TE85G21137301C3NSJ0382',
+      '55"|VU|1no': '3TE55G19140901EC6471122',
+      '55"|VU|2no': '3TE55G18520201EAL492100',
+      '55"|VU|3no': '3TE55G19140901EC6470292',
+      '55"|VU|4no': '3TE55G1913201EB2530663',
+      '55"|VU|5no': '3TE55G19140701EBQ5MV10844',
+      '55"|Samsung|1no': 'OAPRHPBW400055K',
+      '55"|Samsung|2no': 'OAPRHPBW400061B',
+      '55"|Samsung|3no': 'OAPRHPBW400054E',
+      '55"|Samsung|4no': 'OAPRHPBW400056H',
+      '55"|Samsung|5no': 'OAPRHPBWB00311M',
+      '65"|VU|1no': 'LTDN65XT780XWAU3D',
+      '65"|VU|2no': '1BBKSJ1433',
+      '65"|VU|3no': '1BBKSJ1429',
+      '55"|TRUSENSE|1no': 'TS-550010240482',
+      '55"|TRUSENSE|2no': 'TS-550010240488',
+      '65"|TRUSENSE|1no': 'TS-6500102400106',
+      '65"|TRUSENSE|2no': 'TS-6500102400105',
+      '40"|TRUSENSE|1no': 'TS4343S092400478',
+      '40"|TRUSENSE|2no': 'TS4343S092400508',
+      '40"|TRUSENSE|3no': 'TS4343S092400498',
+      '40"|TRUSENSE|4no': 'TS4343S092400476',
+      '40"|VU|1no': 'TS4343S092400478'
+    };
+
+    const psize = document.getElementById("psize");
+    const pbrand = document.getElementById("pbrand");
+    const pvw = document.getElementById("pvw");
+    const pserial = document.getElementById("pserial");
+    const pqty = document.getElementById("pqty");
+
+    function updateVW() {
+      pvw.innerHTML = '<option value="">Select</option>';
+      pserial.value = "";
+      if (!psize.value || !pbrand.value) return;
+      Object.keys(plasmaSerialDB).forEach(k => {
+        const [s, b, vw] = k.split('|');
+        if (s === psize.value && b === pbrand.value) {
+          const opt = document.createElement("option");
+          opt.value = vw;
+          opt.textContent = vw;
+          pvw.appendChild(opt);
+        }
+      });
+    }
+    function updateSerial() {
+      const key = `${psize.value}|${pbrand.value}|${pvw.value}`;
+      pserial.value = plasmaSerialDB[key] || "";
+    }
+    psize.onchange = updateVW;
+    pbrand.onchange = updateVW;
+    pvw.onchange = updateSerial;
+
+    function getPrintDateTime() {
+      const now = new Date();
+      const date = now.toLocaleDateString("en-GB");
+      const time = now.toLocaleTimeString("en-IN", {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+      });
+      return `Date : ${date} | Print Time : ${time}`;
+    }
+    function getNextChallanNumber() {
+      const key = "vw_challan_counter";
+      let num = parseInt(localStorage.getItem(key) || "1000", 10);
+      num++;
+      localStorage.setItem(key, String(num));
+      return "VW-" + num;
+    }
+  </script>
+
+  <script>
+    let sr = 1;
+
+    const ledMain = document.getElementById("ledMain");
+    const ledBox = document.getElementById("ledBox");
+    const projectorMain = document.getElementById("projectorMain");
+    const projectorBox = document.getElementById("projectorBox");
+    const standMain = document.getElementById("standMain");
+    const standBox = document.getElementById("standBox");
+    const powerAdvMain = document.getElementById("powerAdvMain");
+    const powerAdvBox = document.getElementById("powerAdvBox");
+    const plasmaMain = document.getElementById("plasmaMain");
+    const plasmaBox = document.getElementById("plasmaBox");
+    const procMain = document.getElementById("procMain");
+    const procBox = document.getElementById("procBox");
+    const soundMain = document.getElementById("soundMain");
+    const soundBox = document.getElementById("soundBox");
+    const cableMain = document.getElementById("cableMain");
+    const cableBox = document.getElementById("cableBox");
+    const powerMain = document.getElementById("powerMain");
+    const powerBox = document.getElementById("powerBox");
+    const watchoutMain = document.getElementById("watchoutMain");
+    const watchoutBox = document.getElementById("watchoutBox");
+    const txrxMain = document.getElementById("txrxMain");
+    const txrxBox = document.getElementById("txrxBox");
+    const laptopMain = document.getElementById("laptopMain");
+    const laptopBox = document.getElementById("laptopBox");
+    const captureMain = document.getElementById("captureMain");
+    const captureBox = document.getElementById("captureBox");
+    const operatorMain = document.getElementById("operatorMain");
+    const operatorBox = document.getElementById("operatorBox");
+
+    const list = document.getElementById("list");
+    const f_client = document.getElementById("f_client");
+    const f_mobile = document.getElementById("f_mobile");
+    const f_location = document.getElementById("f_location");
+    const f_vehicle = document.getElementById("f_vehicle");
+    const f_driver = document.getElementById("f_driver");
+    const f_billby = document.getElementById("f_billby");
+    const f_date = document.getElementById("f_date");
+    const p_client = document.getElementById("p_client");
+    const p_mobile = document.getElementById("p_mobile");
+    const p_location = document.getElementById("p_location");
+    const p_driver = document.getElementById("p_driver");
+    const p_vehicle = document.getElementById("p_vehicle");
+    const p_billby = document.getElementById("p_billby");
+    const p_date = document.getElementById("p_date");
+    const p_challan = document.getElementById("p_challan");
+    const p_datetime = document.getElementById("p_datetime");
+    const CHALLAN_TYPE = "RETURNABLE";
+
+    ledMain.onchange = () => ledBox.style.display = ledMain.checked ? "block" : "none";
+    projectorMain.onchange = () => projectorBox.style.display = projectorMain.checked ? "block" : "none";
+    standMain.onchange = () => standBox.style.display = standMain.checked ? "block" : "none";
+    powerAdvMain.onchange = () => powerAdvBox.style.display = powerAdvMain.checked ? "block" : "none";
+    plasmaMain.onchange = () => plasmaBox.style.display = plasmaMain.checked ? "block" : "none";
+    procMain.onchange = () => procBox.style.display = procMain.checked ? "block" : "none";
+    soundMain.onchange = () => soundBox.style.display = soundMain.checked ? "block" : "none";
+    cableMain.onchange = () => cableBox.style.display = cableMain.checked ? "block" : "none";
+    powerMain.onchange = () => powerBox.style.display = powerMain.checked ? "block" : "none";
+    watchoutMain.onchange = () => watchoutBox.style.display = watchoutMain.checked ? "block" : "none";
+    txrxMain.onchange = () => txrxBox.style.display = txrxMain.checked ? "block" : "none";
+    laptopMain.onchange = () => laptopBox.style.display = laptopMain.checked ? "block" : "none";
+    captureMain.onchange = () => captureBox.style.display = captureMain.checked ? "block" : "none";
+    operatorMain.onchange = () => operatorBox.style.display = operatorMain.checked ? "block" : "none";
+
+    function addPlasma() {
+      if (!psize.value || !pbrand.value || !pvw.value || !pserial.value) {
+        alert("Size, Company, VW No आणि Serial निवडा");
+        return;
+      }
+      const qty = pqty.value || 1;
+      const desc = `Plasma ${psize.value} ${pbrand.value} | VW-${pvw.value} | Serial: ${pserial.value}`;
+      list.innerHTML += `
+    <tr>
+      <td class="center">${sr++}</td>
+      <td>${desc}</td>
+      <td class="center">${qty}</td>
+    </tr>`;
+    }
+
+    function addLaptopRow() {
+      const list = document.getElementById("laptopList");
+      const div = document.createElement("div");
+      div.className = "sub-row";
+      div.innerHTML = `
+    <input type="checkbox" class="laptop-item">
+    Laptop Name / Model :
+    <input type="text" class="laptop-name" placeholder="Example: Dell G15 i7">
+    Serial No :
+    <input type="text" class="laptop-serial" placeholder="Enter Serial">
+    QTY
+    <input type="number" class="laptop-qty" value="1" style="width:60px">
+  `;
+      list.appendChild(div);
+    }
+
+    function addCaptureRow() {
+      const list = document.getElementById("captureList");
+      const div = document.createElement("div");
+      div.className = "sub-row";
+      div.innerHTML = `
+    <input type="checkbox" class="capture-item">
+    Capture Card Name / Model :
+    <input type="text" class="capture-name" placeholder="Example: Elgato 4K60 Pro">
+    Serial No :
+    <input type="text" class="capture-serial" placeholder="Enter Serial">
+    QTY
+    <input type="number" class="capture-qty" value="1" style="width:60px">
+  `;
+      list.appendChild(div);
+    }
+
+    function generateChallan() {
+      list.innerHTML = "";
+      sr = 1;
+      p_client.innerText = f_client.value;
+      p_mobile.innerText = f_mobile.value;
+      p_location.innerText = f_location.value;
+      p_vehicle.innerText = f_vehicle.value;
+      p_driver.innerText = f_driver.value;
+      p_billby.innerText = f_billby.value;
+      p_date.innerText = f_date.value;
+
+      const no = getNextChallanNumber();
+      p_challan.innerText = no;
+      p_datetime.innerText = getPrintDateTime();
+
+      document.querySelectorAll(".led-item").forEach(i => {
+        if (i.checked) {
+          const row = i.closest(".sub-row");
+          const q = row ? row.querySelector(".lqty").value : "";
+          if (q) {
+            list.innerHTML += `<tr><td class="center">${sr++}</td><td>${i.dataset.name}</td><td class="center">${q}</td></tr>`;
+          }
+        }
+      });
+
+      document.querySelectorAll(".projector-item").forEach(i => {
+        if (i.checked) {
+          const row = i.closest(".sub-row");
+          const q = row ? row.querySelector(".prqty").value : "";
+          if (q) {
+            const name = `${i.dataset.name} | VW ${i.dataset.vw}`;
+            list.innerHTML += `<tr><td class="center">${sr++}</td><td>${name}</td><td class="center">${q}</td></tr>`;
+          }
+        }
+      });
+
+      document.querySelectorAll(".stand-item").forEach(i => {
+        if (i.checked) {
+          const row = i.closest(".sub-row");
+          const q = row ? row.querySelector(".stqty").value : "";
+          if (q) {
+            list.innerHTML += `<tr><td class="center">${sr++}</td><td>${i.dataset.name}</td><td class="center">${q}</td></tr>`;
+          }
+        }
+      });
+
+      document.querySelectorAll(".power-adv").forEach(i => {
+        if (i.checked) {
+          const row = i.closest(".sub-row");
+          const q = row ? row.querySelector(".paq").value : "";
+          if (q) {
+            const name = i.dataset.vw ? `${i.dataset.name} | VW-${i.dataset.vw}` : i.dataset.name;
+            list.innerHTML += `<tr><td class="center">${sr++}</td><td>${name}</td><td class="center">${q}</td></tr>`;
+          }
+        }
+      });
+
+      document.querySelectorAll(".txrx-item").forEach(i => {
+        if (i.checked) {
+          const row = i.closest(".sub-row");
+          const q = row ? row.querySelector(".txrxqty").value : "";
+          if (q) {
+            list.innerHTML += `<tr><td class="center">${sr++}</td><td>${i.dataset.name}</td><td class="center">${q}</td></tr>`;
+          }
+        }
+      });
+
+      document.querySelectorAll(".laptop-item").forEach(i => {
+        if (i.checked) {
+          const row = i.closest(".sub-row");
+          const name = row.querySelector(".laptop-name").value || "Laptop";
+          const serial = row.querySelector(".laptop-serial").value || "";
+          const qty = row.querySelector(".laptop-qty").value || 1;
+          let desc = name;
+          if (serial) { desc += ` | Serial: ${serial}`; }
+          list.innerHTML += `<tr><td class="center">${sr++}</td><td>${desc}</td><td class="center">${qty}</td></tr>`;
+        }
+      });
+
+      document.querySelectorAll(".capture-item").forEach(i => {
+        if (i.checked) {
+          const row = i.closest(".sub-row");
+          const name = row.querySelector(".capture-name").value || "Capture Card";
+          const serial = row.querySelector(".capture-serial").value || "";
+          const qty = row.querySelector(".capture-qty").value || 1;
+          let desc = name;
+          if (serial) { desc += ` | Serial: ${serial}`; }
+          list.innerHTML += `<tr><td class="center">${sr++}</td><td>${desc}</td><td class="center">${qty}</td></tr>`;
+        }
+      });
+
+      document.querySelectorAll(".proc-item").forEach(i => {
+        if (i.checked) {
+          const wrapper = i.closest(".sub-row") || i.closest("label");
+          const qtyInput = wrapper ? wrapper.querySelector(".pqty2") : null;
+          if (!qtyInput) return;
+          const q = qtyInput.value;
+          if (q) {
+            let name = i.dataset.name || i.dataset.type;
+            const pname = wrapper.querySelector(".pname");
+            if (pname && pname.value.trim()) {
+              name += " (" + pname.value.trim() + ")";
+            }
+            list.innerHTML += `<tr><td class="center">${sr++}</td><td>${name}</td><td class="center">${q}</td></tr>`;
+          }
+        }
+      });
+
+      document.querySelectorAll(".sound-item").forEach(i => {
+        if (i.checked) {
+          const q = i.closest(".sub-row").querySelector(".sqty").value;
+          if (q) list.innerHTML += `<tr><td class="center">${sr++}</td><td>${i.dataset.name}</td><td class="center">${q}</td></tr>`;
+        }
+      });
+
+      document.querySelectorAll(".cable-item").forEach(i => {
+        if (i.checked) {
+          const q = i.closest(".sub-row").querySelector(".cqty").value;
+          if (q) list.innerHTML += `<tr><td class="center">${sr++}</td><td>${i.dataset.name}</td><td class="center">${q}</td></tr>`;
+        }
+      });
+
+      document.querySelectorAll(".watchout-item").forEach(i => {
+        if (i.checked) {
+          const q = i.closest(".sub-row").querySelector(".wqty").value;
+          if (q) list.innerHTML += `<tr><td class="center">${sr++}</td><td>${i.dataset.name}</td><td class="center">${q}</td></tr>`;
+        }
+      });
+
+      // OPERATOR TOOL BAG
+      document.querySelectorAll(".operator-item").forEach(i => {
+        if (i.checked) {
+          const row = i.closest(".sub-row");
+          const support = row.querySelector(".support-op").value.trim();
+          let name = i.dataset.name;
+          if (support) {
+            name += " ( Support : " + support + " )";
+          }
+          list.innerHTML += `
+        <tr>
+          <td class="center">${sr++}</td>
+          <td>${name}</td>
+          <td class="center">1</td>
+        </tr>`;
+        }
+      });
+    }
+
+    function sendWhatsApp() {
+      const teamNo = document.getElementById("setup_team").value;
+      if (!teamNo) {
+        alert("Setup team select kara");
+        return;
+      }
+      const challanNo = document.getElementById("p_challan").innerText || "(Not Generated)";
+      const client = document.getElementById("p_client").innerText || f_client.value;
+      const location = document.getElementById("p_location").innerText || f_location.value;
+      const dateTime = document.getElementById("p_datetime").innerText || getPrintDateTime();
+      const driver = document.getElementById("p_driver").innerText || f_driver.value;
+      const vehicle = document.getElementById("p_vehicle").innerText || f_vehicle.value;
+      const challanType = "RETURNABLE";
+
+
+      const message = `
+VIDEOWAVES - SETUP CHALLAN
+
+Challan No : ${challanNo}
+${dateTime}
+
+Client : ${client}
+Location : ${location}
+Driver : ${driver}
+Vehicle : ${vehicle}
+Challan Type : ${challanType}
+
+
+
+Please check challan and arrange setup.
+`;
+      const url = "https://wa.me/" + teamNo + "?text=" + encodeURIComponent(message);
+      window.open(url, "_blank");
+    }
+  </script>
+
+  <script>
+    const user = localStorage.getItem("vw_user");
+    if (user) {
+      document.getElementById("f_billby").value = user;
+      const footer = document.createElement("div");
+      footer.style.fontSize = "10px";
+      footer.style.textAlign = "right";
+      footer.style.color = "#555";
+      footer.style.marginTop = "6px";
+      footer.innerText = "Challan created by : " + user;
+      document.querySelector(".page").appendChild(footer);
+    }
+    function logoutUser() {
+      localStorage.removeItem("vw_user");
+      localStorage.removeItem("vw_role");
+      window.location.href = "login.html";
+    }
+  </script>
+
+</body>
+
+</html>
