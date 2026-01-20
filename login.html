@@ -120,39 +120,35 @@ body{
 </div>
 
 <script>
-  <script>
-// 🔹 FIRST TIME SETUP (RUNS ONLY ONCE)
+// FIRST TIME ADMIN CREATE
 if (!localStorage.getItem("vw_users")) {
   const users = {
-    "ADMIN": {
-      password: "1234",
-      role: "admin"
-    }
+    "ADMIN": { password: "1234", role: "admin" }
   };
   localStorage.setItem("vw_users", JSON.stringify(users));
-  console.log("Default ADMIN created");
 }
-</script>
 
 function login(){
-  const u=username.value.trim().toUpperCase();
-  const p=password.value.trim();
-  const users=JSON.parse(localStorage.getItem("vw_users")||"{}");
+  const u = document.getElementById("username").value.trim().toUpperCase();
+  const p = document.getElementById("password").value.trim();
+  const users = JSON.parse(localStorage.getItem("vw_users") || "{}");
 
-  if(users[u] && users[u].password===p){
-    localStorage.setItem("vw_user",u);
-    localStorage.setItem("vw_role",users[u].role);
-    location.href = users[u].role==="admin"
+  if (users[u] && users[u].password === p) {
+    localStorage.setItem("vw_user", u);
+    localStorage.setItem("vw_role", users[u].role);
+
+    location.href = users[u].role === "admin"
       ? "admin.html"
       : "videowaves_challan.html";
-  }else{
-    const box=document.getElementById("loginBox");
+  } else {
+    const box = document.getElementById("loginBox");
     box.classList.remove("shake");
     void box.offsetWidth;
     box.classList.add("shake");
   }
 }
 </script>
+
 
 </body>
 </html>
