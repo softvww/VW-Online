@@ -1,76 +1,28 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>VideoWaves Login</title>
-<style>
-body{
-  margin:0;
-  height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:#0f2d35;
-  font-family:Arial;
-}
-.box{
-  background:#fff;
-  padding:40px;
-  border-radius:16px;
-  width:320px;
-  text-align:center;
-}
-input{
-  width:100%;
-  padding:12px;
-  margin:10px 0;
-  border-radius:8px;
-  border:1px solid #ccc;
-}
-button{
-  width:100%;
-  padding:12px;
-  border:none;
-  border-radius:10px;
-  background:#000;
-  color:#fff;
-  font-size:16px;
-  cursor:pointer;
-}
-</style>
-</head>
-
-<body>
-
-<div class="box" id="loginBox">
-  <h2>VIDEOWAVES</h2>
-
-  <input id="username" placeholder="Username">
-  <input id="password" type="password" placeholder="Password">
-
-  <button type="button" onclick="login()">Login</button>
-</div>
-
 <script>
-// create admin once
-if(!localStorage.getItem("vw_users")){
+/* CREATE DEFAULT ADMIN */
+if (!localStorage.getItem("vw_users")) {
   localStorage.setItem("vw_users", JSON.stringify({
-    "ADMIN": {password:"1234", role:"admin"}
+    admin: { password: "admin123", role: "admin" }
   }));
 }
 
 function login(){
-  const u = username.value.trim().toUpperCase();
+  const u = username.value.trim().toLowerCase();
   const p = password.value.trim();
+
   const users = JSON.parse(localStorage.getItem("vw_users"));
 
-  if(users[u] && users[u].password === p){
+  if (users[u] && users[u].password === p) {
     localStorage.setItem("vw_user", u);
-    location.href = "admin.html";
-  }else{
+    localStorage.setItem("vw_role", users[u].role);
+
+    if (users[u].role === "admin") {
+      location.href = "admin.html";
+    } else {
+      location.href = "videowaves_challan.html";
+    }
+  } else {
     alert("Wrong username or password");
   }
 }
 </script>
-
-</body>
-</html>
