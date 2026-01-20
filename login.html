@@ -1,76 +1,76 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<title>VIDEOWAVES Login</title>
-
+<title>Login</title>
 <style>
 body{
-  margin:0;
-  height:100vh;
+  background:#0f2027;
   display:flex;
   justify-content:center;
   align-items:center;
-  background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-  font-family:Arial;
+  height:100vh;
+  font-family:Arial
 }
-#loginBox{
+.box{
   background:#fff;
   padding:30px;
   width:320px;
-  border-radius:12px;
-  text-align:center;
+  border-radius:10px;
+  text-align:center
 }
-h2{margin-bottom:20px}
-input{
+input,button{
   width:100%;
   padding:10px;
-  margin:10px 0;
+  margin-top:10px
 }
 button{
-  width:100%;
-  padding:10px;
-  background:#000;
-  color:#fff;
-  border:none;
-  cursor:pointer;
+  background:black;
+  color:white;
+  cursor:pointer
 }
 </style>
 </head>
-
 <body>
 
-<div id="loginBox">
+<div class="box">
   <h2>VIDEOWAVES</h2>
-  <input id="username" placeholder="Login ID">
-  <input id="password" type="password" placeholder="Password">
+  <input id="user" placeholder="Username">
+  <input id="pass" type="password" placeholder="Password">
   <button onclick="login()">Login</button>
 </div>
 
 <script>
-/* CREATE DEFAULT ADMIN (FIRST LOAD ONLY) */
-if (!localStorage.getItem("vw_users")) {
-  localStorage.setItem("vw_users", JSON.stringify({
-    admin: { password: "admin123", role: "admin" }
-  }));
+// 🔹 AUTO CREATE USERS (FIRST TIME)
+if(!localStorage.getItem("vw_users")){
+  const users = {
+    "giri": { password: "1234", role: "user" },
+    "ismail": { password: "1234", role: "user" },
+    "raju bhai": { password: "1234", role: "user" },
+    "kashiram mama": { password: "1234", role: "user" },
+    "ADMIN": { password: "admin123", role: "admin" }
+  };
+  localStorage.setItem("vw_users", JSON.stringify(users));
 }
 
+// 🔐 LOGIN LOGIC
 function login(){
-  const u = username.value.trim().toLowerCase();
-  const p = password.value.trim();
+  const u = user.value.trim();
+  const p = pass.value;
+
   const users = JSON.parse(localStorage.getItem("vw_users"));
 
-  if (users[u] && users[u].password === p) {
-    localStorage.setItem("vw_user", u);
-    localStorage.setItem("vw_role", users[u].role);
-
-    if (users[u].role === "admin") {
-      location.href = "admin.html";
-    } else {
-      location.href = "videowaves_challan.html";
-    }
-  } else {
+  if(!users[u] || users[u].password !== p){
     alert("Wrong username or password");
+    return;
+  }
+
+  localStorage.setItem("vw_user", u);
+  localStorage.setItem("vw_role", users[u].role);
+
+  if(users[u].role === "admin"){
+    location.href = "admin.html";
+  }else{
+    location.href = "user.html";
   }
 }
 </script>
