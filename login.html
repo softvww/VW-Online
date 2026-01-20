@@ -1,5 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>VIDEOWAVES Login</title>
+
+<style>
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+  font-family:Arial;
+}
+#loginBox{
+  background:#fff;
+  padding:30px;
+  width:320px;
+  border-radius:12px;
+  text-align:center;
+}
+h2{margin-bottom:20px}
+input{
+  width:100%;
+  padding:10px;
+  margin:10px 0;
+}
+button{
+  width:100%;
+  padding:10px;
+  background:#000;
+  color:#fff;
+  border:none;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div id="loginBox">
+  <h2>VIDEOWAVES</h2>
+  <input id="username" placeholder="Login ID">
+  <input id="password" type="password" placeholder="Password">
+  <button onclick="login()">Login</button>
+</div>
+
 <script>
-/* CREATE DEFAULT ADMIN */
+/* CREATE DEFAULT ADMIN (FIRST LOAD ONLY) */
 if (!localStorage.getItem("vw_users")) {
   localStorage.setItem("vw_users", JSON.stringify({
     admin: { password: "admin123", role: "admin" }
@@ -9,7 +58,6 @@ if (!localStorage.getItem("vw_users")) {
 function login(){
   const u = username.value.trim().toLowerCase();
   const p = password.value.trim();
-
   const users = JSON.parse(localStorage.getItem("vw_users"));
 
   if (users[u] && users[u].password === p) {
@@ -26,3 +74,6 @@ function login(){
   }
 }
 </script>
+
+</body>
+</html>
