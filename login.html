@@ -1,154 +1,76 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<title>VIDEOWAVES Login</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<title>VideoWaves Login</title>
 <style>
-*{box-sizing:border-box}
-
 body{
   margin:0;
   height:100vh;
-  font-family:Arial, sans-serif;
-  background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
   display:flex;
-  align-items:center;
   justify-content:center;
+  align-items:center;
+  background:#0f2d35;
+  font-family:Arial;
 }
-
-/* LOGIN CARD */
-.login-box{
-  width:360px;
+.box{
   background:#fff;
-  padding:32px;
-  border-radius:18px;
+  padding:40px;
+  border-radius:16px;
+  width:320px;
   text-align:center;
-  box-shadow:0 25px 60px rgba(0,0,0,.45);
-  animation:zoomIn .6s ease;
 }
-
-@keyframes zoomIn{
-  from{opacity:0;transform:scale(.92)}
-  to{opacity:1;transform:scale(1)}
-}
-
-/* LOGO TEXT */
-.logo{
-  font-size:34px;
-  font-weight:800;
-  letter-spacing:2px;
-  margin-bottom:26px;
-  overflow:hidden;
-}
-
-.logo span{
-  display:inline-block;
-  transform:translateX(-120%);
-  animation:logoSlide 0.9s ease forwards;
-}
-
-@keyframes logoSlide{
-  to{transform:translateX(0)}
-}
-
-/* INPUTS */
-.login-box input{
+input{
   width:100%;
-  padding:13px;
-  margin-bottom:16px;
+  padding:12px;
+  margin:10px 0;
+  border-radius:8px;
   border:1px solid #ccc;
-  border-radius:8px;
-  font-size:15px;
 }
-
-.login-box input:focus{
-  outline:none;
-  border-color:#000;
-}
-
-/* BUTTON */
-.login-box button{
-  width:140px;
-  padding:11px;
+button{
+  width:100%;
+  padding:12px;
   border:none;
-  border-radius:8px;
+  border-radius:10px;
   background:#000;
   color:#fff;
   font-size:16px;
   cursor:pointer;
-  transition:.3s;
-}
-
-.login-box button:hover{
-  background:#333;
-  transform:translateY(-2px);
-}
-
-/* SHAKE */
-@keyframes shake{
-  0%,100%{transform:translateX(0)}
-  25%{transform:translateX(-6px)}
-  75%{transform:translateX(6px)}
-}
-.shake{animation:shake .35s}
-
-.footer{
-  margin-top:16px;
-  font-size:12px;
-  color:#777;
 }
 </style>
 </head>
 
 <body>
 
-<div class="login-box" id="loginBox">
+<div class="box" id="loginBox">
+  <h2>VIDEOWAVES</h2>
 
-  <!-- FULL WORD ANIMATION -->
-  <div class="logo">
-    <span>VIDEOWAVES</span>
-  </div>
+  <input id="username" placeholder="Username">
+  <input id="password" type="password" placeholder="Password">
 
-  <input type="text" id="username" placeholder="Login ID">
-  <input type="password" id="password" placeholder="Password">
-
-  <button onclick="login()">Login</button>
-
-  <div class="footer">Secure Access</div>
+  <button type="button" onclick="login()">Login</button>
 </div>
 
 <script>
-// FIRST TIME ADMIN CREATE
-if (!localStorage.getItem("vw_users")) {
-  const users = {
-    "ADMIN": { password: "1234", role: "admin" }
-  };
-  localStorage.setItem("vw_users", JSON.stringify(users));
+// create admin once
+if(!localStorage.getItem("vw_users")){
+  localStorage.setItem("vw_users", JSON.stringify({
+    "ADMIN": {password:"1234", role:"admin"}
+  }));
 }
 
 function login(){
-  const u = document.getElementById("username").value.trim().toUpperCase();
-  const p = document.getElementById("password").value.trim();
-  const users = JSON.parse(localStorage.getItem("vw_users") || "{}");
+  const u = username.value.trim().toUpperCase();
+  const p = password.value.trim();
+  const users = JSON.parse(localStorage.getItem("vw_users"));
 
-  if (users[u] && users[u].password === p) {
+  if(users[u] && users[u].password === p){
     localStorage.setItem("vw_user", u);
-    localStorage.setItem("vw_role", users[u].role);
-
-    location.href = users[u].role === "admin"
-      ? "admin.html"
-      : "videowaves_challan.html";
-  } else {
-    const box = document.getElementById("loginBox");
-    box.classList.remove("shake");
-    void box.offsetWidth;
-    box.classList.add("shake");
+    location.href = "admin.html";
+  }else{
+    alert("Wrong username or password");
   }
 }
 </script>
-
 
 </body>
 </html>
