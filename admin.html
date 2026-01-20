@@ -20,9 +20,7 @@ select,input,button{
   width:100%;
   font-size:14px
 }
-button{
-  cursor:pointer
-}
+button{cursor:pointer}
 </style>
 </head>
 <body>
@@ -45,19 +43,26 @@ if(localStorage.getItem("vw_role") !== "admin"){
   location.href = "login.html";
 }
 
-// 📦 Load users safely
+// 📦 Default users (auto create)
 let users = JSON.parse(localStorage.getItem("vw_users"));
+
 if(!users){
-  alert("No users found. Please login again.");
-  location.href = "login.html";
+  users = {
+    "giri": { password: "1234", role: "user" },
+    "ismail": { password: "1234", role: "user" },
+    "raju bhai": { password: "1234", role: "user" },
+    "kashiram mama": { password: "1234", role: "user" },
+    "ADMIN": { password: "admin123", role: "admin" }
+  };
+  localStorage.setItem("vw_users", JSON.stringify(users));
 }
 
+// 📋 Fill dropdown
 const sel = document.getElementById("userList");
 const newPass = document.getElementById("newPass");
 
-// 👥 Fill dropdown
 Object.keys(users).forEach(u=>{
-  if(u !== "ADMIN"){
+  if(users[u].role === "user"){
     const o = document.createElement("option");
     o.value = u;
     o.text = u;
