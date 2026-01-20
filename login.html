@@ -120,6 +120,20 @@ body{
 </div>
 
 <script>
+  <script>
+// 🔹 FIRST TIME SETUP (RUNS ONLY ONCE)
+if (!localStorage.getItem("vw_users")) {
+  const users = {
+    "ADMIN": {
+      password: "1234",
+      role: "admin"
+    }
+  };
+  localStorage.setItem("vw_users", JSON.stringify(users));
+  console.log("Default ADMIN created");
+}
+</script>
+
 function login(){
   const u=username.value.trim().toUpperCase();
   const p=password.value.trim();
