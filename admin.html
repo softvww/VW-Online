@@ -10,14 +10,18 @@ body{
 }
 .box{
   background:#fff;
-  padding:20px;
+  padding:25px;
   width:420px;
   border-radius:10px
 }
 select,input,button{
-  padding:8px;
-  margin-top:8px;
-  width:100%
+  padding:10px;
+  margin-top:10px;
+  width:100%;
+  font-size:14px
+}
+button{
+  cursor:pointer
 }
 </style>
 </head>
@@ -35,23 +39,25 @@ select,input,button{
 </div>
 
 <script>
-/* 🔐 AUTH CHECK */
-if (localStorage.getItem("vw_role") !== "admin") {
+// 🔐 Admin protection
+if(localStorage.getItem("vw_role") !== "admin"){
   alert("Unauthorized");
   location.href = "login.html";
 }
 
-/* 📦 LOAD USERS */
-const users = JSON.parse(localStorage.getItem("vw_users") || "{}");
-const sel = document.getElementById("userList");
-
-if (Object.keys(users).length === 0) {
-  alert("No users found");
+// 📦 Load users safely
+let users = JSON.parse(localStorage.getItem("vw_users"));
+if(!users){
+  alert("No users found. Please login again.");
+  location.href = "login.html";
 }
 
-/* 👥 FILL USER LIST */
-Object.keys(users).forEach(u => {
-  if (users[u].role !== "admin") {
+const sel = document.getElementById("userList");
+const newPass = document.getElementById("newPass");
+
+// 👥 Fill dropdown
+Object.keys(users).forEach(u=>{
+  if(u !== "ADMIN"){
     const o = document.createElement("option");
     o.value = u;
     o.text = u;
@@ -59,22 +65,26 @@ Object.keys(users).forEach(u => {
   }
 });
 
-/* 🔑 RESET PASSWORD */
+// 🔄 Reset password
 function resetPass(){
-  if (!sel.value || !newPass.value) {
-    alert("Select user & enter password");
+  if(!sel.value){
+    alert("Please select user");
     return;
   }
+  if(newPass.value.trim() === ""){
+    alert("Password cannot be empty");
+    return;
+  }
+
   users[sel.value].password = newPass.value;
   localStorage.setItem("vw_users", JSON.stringify(users));
-  alert("Password Updated");
+  alert("Password Updated Successfully");
   newPass.value = "";
 }
 
-/* 🚪 LOGOUT */
+// 🚪 Logout
 function logout(){
-  localStorage.removeItem("vw_user");
-  localStorage.removeItem("vw_role");
+  localStorage.clear();
   location.href = "login.html";
 }
 </script>
