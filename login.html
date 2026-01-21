@@ -40,26 +40,26 @@ button{
 </div>
 
 <script>
-// 🔹 AUTO CREATE USERS (FIRST TIME)
+// 🔹 AUTO CREATE USERS (FIRST TIME ONLY)
 if(!localStorage.getItem("vw_users")){
   const users = {
     "giri": { password: "1234", role: "user" },
     "ismail": { password: "1234", role: "user" },
     "raju bhai": { password: "1234", role: "user" },
     "kashiram mama": { password: "1234", role: "user" },
-    "ADMIN": { password: "admin123", role: "admin" }
+    "admin": { password: "admin123", role: "admin" }
   };
   localStorage.setItem("vw_users", JSON.stringify(users));
 }
 
-// 🔐 LOGIN LOGIC
+// 🔐 LOGIN FUNCTION
 function login(){
-  const u = user.value.trim();
-  const p = pass.value;
+  const u = document.getElementById("user").value.trim();
+  const p = document.getElementById("pass").value;
 
   const users = JSON.parse(localStorage.getItem("vw_users"));
 
-  if(!users[u] || users[u].password !== p){
+  if(!users || !users[u] || users[u].password !== p){
     alert("Wrong username or password");
     return;
   }
@@ -70,7 +70,7 @@ function login(){
   if(users[u].role === "admin"){
     location.href = "admin.html";
   }else{
-    location.href = "user.html";
+    location.href = "videowaves_challan.html";
   }
 }
 </script>
