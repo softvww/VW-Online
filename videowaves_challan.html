@@ -36,6 +36,47 @@
       button {
         display: none !important;
       }
+    /* ================= PRINT FIX START ================= */
+@media print {
+
+  body {
+    margin: 10mm;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    page-break-inside: auto;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tr {
+    page-break-inside: avoid;
+  }
+
+  th, td {
+    border: 1px solid #000;
+    padding: 6px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  /* Qty column fix */
+  th:last-child,
+  td:last-child {
+    width: 50px;
+    text-align: center;
+  }
+
+  button {
+    display: none;
+  }
+}
+/* ================= PRINT FIX END ================= */
+  
     }
 
     /* PAGE LAYOUT */
