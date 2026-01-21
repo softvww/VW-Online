@@ -1353,6 +1353,12 @@ Please check challan and arrange setup.
       localStorage.removeItem("vw_role");
       window.location.href = "login.html";
     }
+    <script>
+if(localStorage.getItem("vw_role") !== "user"){
+  location.href = "login.html";
+}
+</script>
+
   </script>
 
 </body>
