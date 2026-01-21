@@ -4,76 +4,123 @@
 <title>ADMIN PANEL</title>
 <style>
 body{
-  font-family:Arial;
+  font-family: Arial;
   background:#f2f2f2;
-  padding:30px
+  padding:30px;
 }
 .box{
   background:#fff;
   padding:25px;
   width:420px;
-  border-radius:10px
+  border-radius:10px;
 }
 select,input,button{
   padding:10px;
   margin-top:10px;
   width:100%;
-  font-size:14px
+  font-size:14px;
 }
-button{cursor:pointer}
+button{
+  cursor:pointer;
+}
+hr{
+  margin:20px 0;
+}
 </style>
 </head>
 <body>
 
 <div class="box">
-<h3>ADMIN – Reset User Password</h3>
+  <h3>ADMIN – User Management</h3>
 
-<select id="userList"></select>
-<input id="newPass" type="password" placeholder="New Password">
-<button onclick="resetPass()">Change Password</button>
+  <!-- CREATE USER -->
+  <input id="newUser" placeholder="Username">
+  <input id="newPassCreate" type="password" placeholder="Password">
+  <select id="newRole">
+    <option value="user">User</option>
+    <option value="admin">Admin</option>
+  </select>
+  <button onclick="addUser()">Add User</button>
 
-<br><br>
-<button onclick="logout()">Logout</button>
+  <hr>
+
+  <!-- RESET PASSWORD -->
+  <select id="userList"></select>
+  <input id="newPass" type="password" placeholder="New Password">
+  <button onclick="resetPass()">Change Password</button>
+
+  <hr>
+
+  <!-- DELETE USER -->
+  <button onclick="deleteUser()">Delete Selected User</button>
+
+  <hr>
+
+  <button onclick="logout()">Logout</button>
 </div>
 
 <script>
-// 🔐 Admin protection
+// 🔐 ADMIN PROTECTION
 if(localStorage.getItem("vw_role") !== "admin"){
-  alert("Unauthorized");
   location.href = "login.html";
 }
 
-// 📦 Default users (auto create)
+// 📦 LOAD USERS (CREATE DEFAULT IF EMPTY)
 let users = JSON.parse(localStorage.getItem("vw_users"));
 
 if(!users){
   users = {
-    "giri": { password: "1234", role: "user" },
+    "giri": { password: "giri1234", role: "user" },
     "ismail": { password: "1234", role: "user" },
-    "raju bhai": { password: "1234", role: "user" },
-    "kashiram mama": { password: "1234", role: "user" },
-    "ADMIN": { password: "admin123", role: "admin" }
+    "admin": { password: "admin123", role: "admin" }
   };
   localStorage.setItem("vw_users", JSON.stringify(users));
 }
 
-// 📋 Fill dropdown
+// 🔄 RENDER USER DROPDOWN
 const sel = document.getElementById("userList");
-const newPass = document.getElementById("newPass");
-
-Object.keys(users).forEach(u=>{
-  if(users[u].role === "user"){
-    const o = document.createElement("option");
-    o.value = u;
-    o.text = u;
-    sel.appendChild(o);
+function renderUsers(){
+  sel.innerHTML = "";
+  for(let u in users){
+    if(users[u].role === "user"){
+      const o = document.createElement("option");
+      o.value = u;
+      o.text = u;
+      sel.appendChild(o);
+    }
   }
-});
+}
+renderUsers();
 
-// 🔄 Reset password
+// ➕ ADD USER
+function addUser(){
+  const u = newUser.value.trim();
+  const p = newPassCreate.value.trim();
+  const r = newRole.value;
+
+  if(!u || !p){
+    alert("Username & password required");
+    return;
+  }
+  if(users[u]){
+    alert("User already exists");
+    return;
+  }
+
+  users[u] = { password: p, role: r };
+  localStorage.setItem("vw_users", JSON.stringify(users));
+
+  newUser.value = "";
+  newPassCreate.value = "";
+
+  renderUsers();
+  alert("User created successfully");
+}
+
+// 🔄 RESET PASSWORD
 function resetPass(){
   if(!sel.value){
-    alert("Please select user");
+    alert("Select user");
     return;
   }
   if(newPass.value.trim() === ""){
@@ -83,21 +130,27 @@ function resetPass(){
 
   users[sel.value].password = newPass.value;
   localStorage.setItem("vw_users", JSON.stringify(users));
-  alert("Password Updated Successfully");
+
   newPass.value = "";
+  alert("Password updated");
 }
 
-// 🚪 Logout
+// ❌ DELETE USER
+function deleteUser(){
+  if(!sel.value) return;
+  if(!confirm("Delete user?")) return;
+
+  delete users[sel.value];
+  localStorage.setItem("vw_users", JSON.stringify(users));
+  renderUsers();
+}
+
+// 🚪 LOGOUT (SAFE)
 function logout(){
-  localStorage.clear();
+  localStorage.removeItem("vw_user");
+  localStorage.removeItem("vw_role");
   location.href = "login.html";
 }
-  <script>
-if(localStorage.getItem("vw_role") !== "admin"){
-  location.href = "login.html";
-}
-</script>
-
 </script>
 
 </body>
